@@ -143,13 +143,19 @@
 <div id="ticket-create-message">
   <&| /Widgets/TitleBox, title => $title, class => 'messagedetails' &>
 <table border="0" cellpadding="0" cellspacing="0">
-% $m->callback(CallbackName => 'BeforeRequestors', QueueObj => $QueueObj, ARGSRef => \%ARGS);
+% my $default_requestors_value = $ARGS{Requestors} // $session{CurrentUser}->EmailAddress;
+% $m->callback(CallbackName => 'BeforeRequestors', QueueObj => $QueueObj, ARGSRef => \%ARGS, DefaultRequestorsValueRef => \$default_requestors_value,);
 <tr>
 <td class="label">
 <&|/l&>Requestors</&>:
 </td>
 <td class="value" colspan="5">
-<& /Elements/EmailInput, Name => 'Requestors', Size => undef, Default => $ARGS{Requestors} // $session{CurrentUser}->EmailAddress, AutocompleteMultiple => 1 &>
+<& /Elements/EmailInput,
+    Name                 => 'Requestors',
+    Size                 => undef,
+    Default              => $default_requestors_value,
+    AutocompleteMultiple => 1,
+&>
 % $m->callback( CallbackName => 'AfterRequestors', QueueObj => $QueueObj, ARGSRef => \%ARGS );
 </td>
 </tr>
